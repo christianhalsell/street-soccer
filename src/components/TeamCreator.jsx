@@ -1,10 +1,20 @@
-import React from 'react'
+import React, {useState, useEffect} from 'react'
 
 const TeamCreator = () => {
-  let teamRoster = []
+  const numberOfPlayers = 18;
   const numberOfTeams = 4;
-  const numberOfPlayers = 17;
-  let teams = [];
+  let teamRoster = []
+  let tempTeams = [];
+
+  const [teams, setTeams] = useState([])
+
+  useEffect(() => {
+      console.log(`Teams: ${teams}`);
+      console.log(`Team 1: ${teams[0]}`);
+      console.log(`Team 2: ${teams[1]}`);
+      console.log(`Team 3: ${teams[2]}`);
+      console.log(`Team 4: ${teams[3]}`);
+    }, [teams])  
 
   const addPlayers = () => {
     teamRoster = [];
@@ -15,9 +25,9 @@ const TeamCreator = () => {
   };
 
   const createRound = () => {
-    teams = []; // clear teams
+    tempTeams = []; // clear teams
     for (let i = 0; i < numberOfTeams; i++) {
-      teams.push([]);
+      tempTeams.push([]);
     }
   };
 
@@ -42,25 +52,34 @@ const TeamCreator = () => {
     for (let j = 0; j < teamRoster.length / numberOfTeams; j++) {
       for (let k = 0; k < numberOfTeams; k++) {
         if (i < teamRoster.length) {
-          teams[k].push(randomRoster[i])
+          tempTeams[k].push(randomRoster[i])
           i++;
         }
       }    
     }
-    console.log(`Random Team Roster: ${randomRoster}`)
-    console.log(`Teams: ${teams}`);
-    console.log(`Team 1: ${teams[0]}`);
-    console.log(`Team 2: ${teams[1]}`);
-    console.log(`Team 3: ${teams[2]}`);
-    console.log(`Team 4: ${teams[3]}`);
+
+    setTeams(tempTeams);  
   };
 
-  console.log(`Number of Players: ${numberOfPlayers}`);
-  console.log(`Number of Teams: ${numberOfTeams}`);
+  // console.log(`Number of Players: ${numberOfPlayers}`);
+  // console.log(`Number of Teams: ${numberOfTeams}`);
 
   return (
     <div>
-      <button onClick={generateTeams}>Click to generate teams</button>
+      <div><b>Number of Players:</b> {numberOfPlayers}</div>
+      <div><b>Number of Teams:</b> {numberOfTeams}</div>
+      <br />
+      <div><button onClick={generateTeams}>Click to generate teams</button></div>
+      <br />
+      <div>
+        {teams.map((team, idx) => (
+          <div key={team}><b>Team {idx + 1}:</b> {' '}
+          {team.map(player => (
+            <span key={player}>{player}{' '}</span>
+          ))}
+          </div>
+        ))}
+      </div>
     </div>
   )
 }
