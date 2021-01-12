@@ -1,0 +1,20 @@
+{
+  "files": {
+    "main.css": "/street-soccer/static/css/main.ea1455b2.chunk.css",
+    "main.js": "/street-soccer/static/js/main.4e343411.chunk.js",
+    "main.js.map": "/street-soccer/static/js/main.4e343411.chunk.js.map",
+    "runtime-main.js": "/street-soccer/static/js/runtime-main.d8b4cb7b.js",
+    "runtime-main.js.map": "/street-soccer/static/js/runtime-main.d8b4cb7b.js.map",
+    "static/js/2.9a7714a5.chunk.js": "/street-soccer/static/js/2.9a7714a5.chunk.js",
+    "static/js/2.9a7714a5.chunk.js.map": "/street-soccer/static/js/2.9a7714a5.chunk.js.map",
+    "index.html": "/street-soccer/index.html",
+    "static/css/main.ea1455b2.chunk.css.map": "/street-soccer/static/css/main.ea1455b2.chunk.css.map",
+    "static/js/2.9a7714a5.chunk.js.LICENSE.txt": "/street-soccer/static/js/2.9a7714a5.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.d8b4cb7b.js",
+    "static/js/2.9a7714a5.chunk.js",
+    "static/css/main.ea1455b2.chunk.css",
+    "static/js/main.4e343411.chunk.js"
+  ]
+}
