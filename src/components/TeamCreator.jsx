@@ -74,8 +74,8 @@ const TeamCreator = () => {
       <div>
         {teams.map((team, idx) => (
           <div key={team}><b>Team {idx + 1}:</b> {' '}
-          {team.map(player => (
-            <span key={player}>{player}{' '}</span>
+          {team.map((player, i) => (
+            <span key={player}>{player}{i < team.length - 1 ? ', ' : null}</span>
           ))}
           </div>
         ))}
