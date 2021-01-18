@@ -1,4 +1,9 @@
 body,
-button {
+button,
+input {
   font-size: 20px;
+}
+
+input {
+  display: inline-block;
 }

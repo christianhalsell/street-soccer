@@ -1,12 +1,13 @@
 import React, {useState, useEffect} from 'react'
 
 const TeamCreator = () => {
-  const numberOfPlayers = 18;
-  const numberOfTeams = 4;
+  const [numberOfPlayers, setNumberOfPlayers] = useState(12);
+  const [numberOfTeams, setNumberOfTeams] = useState(4);
+  const [teams, setTeams] = useState([])
+
   let teamRoster = []
   let tempTeams = [];
   
-  const [teams, setTeams] = useState([])
 
   const addPlayers = () => {
     teamRoster = [];
@@ -36,6 +37,16 @@ const TeamCreator = () => {
   };
 
   const generateTeams = () => {
+    if (numberOfPlayers < numberOfTeams) {
+      alert("You need more players than number of teams");
+      return;
+    }
+
+    if (numberOfTeams % 2 !== 0) {
+      alert("You need an even numer of teams");
+      return;
+    }
+    
     addPlayers();
     createRound();
 
@@ -54,13 +65,18 @@ const TeamCreator = () => {
     setTeams(tempTeams);  
   };
 
-  // console.log(`Number of Players: ${numberOfPlayers}`);
-  // console.log(`Number of Teams: ${numberOfTeams}`);
-
   return (
     <div>
-      <div><b>Number of Players:</b> {numberOfPlayers}</div>
-      <div><b>Number of Teams:</b> {numberOfTeams}</div>
+      <form>
+        <div className="inputRow">
+          <label><b>Number of Players:</b></label>
+          <input type="number" min="1" value={numberOfPlayers} onChange={e => setNumberOfPlayers(e.target.value)} />
+        </div>
+        <div className="inputRow">
+          <label><b>Number of Teams:</b></label>
+          <input type="number" min="1" value={numberOfTeams} onChange={ e => setNumberOfTeams(e.target.value) } />
+        </div>
+      </form>
       <br />
       <div><button onClick={generateTeams}>Click to generate teams</button></div>
       <br />
