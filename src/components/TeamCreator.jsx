@@ -36,7 +36,7 @@ const TeamCreator = () => {
     return randomPlayers;
   };
 
-  const generateTeams = () => {
+  const generateTeams = () => {    
     if (numberOfPlayers < numberOfTeams) {
       alert("You need more players than number of teams");
       return;
@@ -67,6 +67,8 @@ const TeamCreator = () => {
 
   return (
     <div>
+      <div>Number of Players: {numberOfPlayers}</div>
+      <div>Number of teams: {numberOfTeams}</div>
       <form>
         <div className="inputRow">
           <label><b>Number of Players:</b></label>
