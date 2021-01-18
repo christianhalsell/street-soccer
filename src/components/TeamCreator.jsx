@@ -5,16 +5,8 @@ const TeamCreator = () => {
   const numberOfTeams = 4;
   let teamRoster = []
   let tempTeams = [];
-
+  
   const [teams, setTeams] = useState([])
-
-  useEffect(() => {
-      console.log(`Teams: ${teams}`);
-      console.log(`Team 1: ${teams[0]}`);
-      console.log(`Team 2: ${teams[1]}`);
-      console.log(`Team 3: ${teams[2]}`);
-      console.log(`Team 4: ${teams[3]}`);
-    }, [teams])  
 
   const addPlayers = () => {
     teamRoster = [];
@@ -49,6 +41,7 @@ const TeamCreator = () => {
 
     const randomRoster = randomizePlayers(teamRoster);
     let i = 0;
+    
     for (let j = 0; j < teamRoster.length / numberOfTeams; j++) {
       for (let k = 0; k < numberOfTeams; k++) {
         if (i < teamRoster.length) {
