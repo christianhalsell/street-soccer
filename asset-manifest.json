@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/street-soccer/static/css/main.6b9029ce.chunk.css",
-    "main.js": "/street-soccer/static/js/main.4981ebde.chunk.js",
-    "main.js.map": "/street-soccer/static/js/main.4981ebde.chunk.js.map",
+    "main.js": "/street-soccer/static/js/main.aeb8cc50.chunk.js",
+    "main.js.map": "/street-soccer/static/js/main.aeb8cc50.chunk.js.map",
     "runtime-main.js": "/street-soccer/static/js/runtime-main.d8b4cb7b.js",
     "runtime-main.js.map": "/street-soccer/static/js/runtime-main.d8b4cb7b.js.map",
     "static/js/2.4fadb520.chunk.js": "/street-soccer/static/js/2.4fadb520.chunk.js",
@@ -15,6 +15,6 @@
     "static/js/runtime-main.d8b4cb7b.js",
     "static/js/2.4fadb520.chunk.js",
     "static/css/main.6b9029ce.chunk.css",
-    "static/js/main.4981ebde.chunk.js"
+    "static/js/main.aeb8cc50.chunk.js"
   ]
 }
