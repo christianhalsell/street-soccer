@@ -1,9 +1,10 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState} from 'react'
 
 const TeamCreator = () => {
-  const [numberOfPlayers, setNumberOfPlayers] = useState(12);
+  const [numberOfPlayers, setNumberOfPlayers] = useState(16);
   const [numberOfTeams, setNumberOfTeams] = useState(4);
-  const [teams, setTeams] = useState([])
+  const [teams, setTeams] = useState([]);
+  const [error, setError] = useState(null);
 
   let teamRoster = []
   let tempTeams = [];
@@ -14,7 +15,6 @@ const TeamCreator = () => {
     for (let i = 1; i <= numberOfPlayers; i++) {
       teamRoster.push(i);
     }
-    console.log(`Team Roster: ${teamRoster}`)
   };
 
   const createRound = () => {
@@ -36,16 +36,8 @@ const TeamCreator = () => {
     return randomPlayers;
   };
 
-  const generateTeams = () => {    
-    if (numberOfPlayers < numberOfTeams) {
-      alert("You need more players than number of teams");
-      return;
-    }
-
-    if (numberOfTeams % 2 !== 0) {
-      alert("You need an even numer of teams");
-      return;
-    }
+  const generateTeams = (e) => {
+    e.preventDefault();
     
     addPlayers();
     createRound();
@@ -61,27 +53,39 @@ const TeamCreator = () => {
         }
       }    
     }
+    
+    if (teamRoster.length < tempTeams.length) {
+      setError(`You need more players than number of teams: Players: ${teamRoster.length}, Teams: ${tempTeams.length}`);
+      return;
+    }
 
+    if (numberOfTeams % 2 !== 0) {
+      setError("You need an even number of teams");
+      return;
+    }
+    setError(null)
     setTeams(tempTeams);  
   };
 
   return (
     <div>
-      <div>Number of Players: {numberOfPlayers}</div>
-      <div>Number of teams: {numberOfTeams}</div>
-      <form>
+      <form onSubmit={generateTeams}>
         <div className="inputRow">
-          <label><b>Number of Players:</b></label>
+          <label><b>Number of Players: </b></label>
           <input type="number" min="1" value={numberOfPlayers} onChange={e => setNumberOfPlayers(e.target.value)} />
         </div>
         <div className="inputRow">
-          <label><b>Number of Teams:</b></label>
+          <label><b>Number of Teams: </b></label>
           <input type="number" min="1" value={numberOfTeams} onChange={ e => setNumberOfTeams(e.target.value) } />
+        </div>
+        <div className="inputRow">
+          <button type="submit">Click to generate teams</button>
         </div>
       </form>
       <br />
-      <div><button onClick={generateTeams}>Click to generate teams</button></div>
-      <br />
+      {error && (
+        <div className="inputRow" style={{color: 'red'}}>{error}</div>
+      )}
       <div>
         {teams.map((team, idx) => (
           <div key={team}><b>Team {idx + 1}:</b> {' '}
