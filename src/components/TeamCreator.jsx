@@ -88,10 +88,12 @@ const TeamCreator = () => {
       )}
       <div>
         {teams.map((team, idx) => (
-          <div className="inputRow" key={team}><b>Team {idx + 1}:</b> {' '}
-          {team.map((player, i) => (
-            <span key={player}>{player}{i < team.length - 1 ? ', ' : null}</span>
-          ))}
+          <div className={(idx + 1) % 2 !== 0 ? 'teamRowTop' : 'teamRowBottom'}>
+            <div className="inputRow" key={team}><b>Team {idx + 1}:</b> {' '}
+            {team.map((player, i) => (
+              <span key={player}>{player}{i < team.length - 1 ? ', ' : null}</span>
+            ))}
+            </div>
           </div>
         ))}
       </div>
