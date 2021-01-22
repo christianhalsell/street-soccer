@@ -1,26 +1,32 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 
 const TeamCreator = () => {
   const [numberOfPlayers, setNumberOfPlayers] = useState(16);
   const [numberOfTeams, setNumberOfTeams] = useState(4);
   const [teams, setTeams] = useState([]);
+  const [gameRound, setGameRound] = useState([]);
   const [error, setError] = useState(null);
 
-  let teamRoster = []
+  let tempRoster = [];
   let tempTeams = [];
-  
+  let tempGameRound = [];
+  let randomRoster;
 
   const addPlayers = () => {
-    teamRoster = [];
+    tempRoster = [];
     for (let i = 1; i <= numberOfPlayers; i++) {
-      teamRoster.push(i);
+      tempRoster.push(i);
     }
   };
 
   const createRound = () => {
-    tempTeams = []; // clear teams
+    tempTeams = [];
     for (let i = 0; i < numberOfTeams; i++) {
       tempTeams.push([]);
+    }
+
+    for (let i = 0; i < numberOfTeams / 2; i++) {
+      tempGameRound.push([])
     }
   };
 
@@ -36,26 +42,37 @@ const TeamCreator = () => {
     return randomPlayers;
   };
 
-  const generateTeams = (e) => {
+  const generateTeams = e => {
     e.preventDefault();
     
     addPlayers();
     createRound();
-
-    const randomRoster = randomizePlayers(teamRoster);
-    let i = 0;
     
-    for (let j = 0; j < teamRoster.length / numberOfTeams; j++) {
+    randomRoster = randomizePlayers(tempRoster);
+    
+    // create team
+    let i = 0;
+    for (let j = 0; j < tempRoster.length / numberOfTeams; j++) {
       for (let k = 0; k < numberOfTeams; k++) {
-        if (i < teamRoster.length) {
+        if (i < tempRoster.length) {
           tempTeams[k].push(randomRoster[i])
           i++;
         }
       }    
     }
+
+    // create gameRound    
+    let j = 0;
+    for (let i = 0; i < tempTeams.length; i++) {      
+      let tempIdx = j
+      if ((i !== 0) && (i % 2 !== 0)) {
+        j++
+      }
+      tempGameRound[tempIdx].push(tempTeams[i])
+    }
     
-    if (teamRoster.length < tempTeams.length) {
-      setError(`You need more players than number of teams: Players: ${teamRoster.length}, Teams: ${tempTeams.length}`);
+    if (tempRoster.length < tempTeams.length) {
+      setError(`You need more players than number of teams: Players: ${tempRoster.length}, Teams: ${tempTeams.length}`);
       return;
     }
 
@@ -63,8 +80,10 @@ const TeamCreator = () => {
       setError("You need an even number of teams");
       return;
     }
+
     setError(null)
-    setTeams(tempTeams);  
+    setTeams(tempTeams);
+    setGameRound(tempGameRound);
   };
 
   return (
@@ -88,7 +107,7 @@ const TeamCreator = () => {
       )}
       <div>
         {teams.map((team, idx) => (
-          <div className={(idx + 1) % 2 !== 0 ? 'teamRowTop' : 'teamRowBottom'}>
+          <div key={team} className={(idx + 1) % 2 !== 0 ? 'teamRowTop' : 'teamRowBottom'}>
             <div className="inputRow" key={team}><b>Team {idx + 1}:</b> {' '}
             {team.map((player, i) => (
               <span key={player}>{player}{i < team.length - 1 ? ', ' : null}</span>
