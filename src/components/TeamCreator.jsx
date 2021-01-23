@@ -3,7 +3,6 @@ import React, { useState } from 'react'
 const TeamCreator = () => {
   const [numberOfPlayers, setNumberOfPlayers] = useState(16);
   const [numberOfTeams, setNumberOfTeams] = useState(4);
-  const [teams, setTeams] = useState([]);
   const [gameRound, setGameRound] = useState([]);
   const [error, setError] = useState(null);
 
@@ -42,15 +41,7 @@ const TeamCreator = () => {
     return randomPlayers;
   };
 
-  const generateTeams = e => {
-    e.preventDefault();
-    
-    addPlayers();
-    createRound();
-    
-    randomRoster = randomizePlayers(tempRoster);
-    
-    // create team
+  const createTeam = () => {
     let i = 0;
     for (let j = 0; j < tempRoster.length / numberOfTeams; j++) {
       for (let k = 0; k < numberOfTeams; k++) {
@@ -60,8 +51,9 @@ const TeamCreator = () => {
         }
       }    
     }
+  }
 
-    // create gameRound    
+  const createGameRound = () => {
     let j = 0;
     for (let i = 0; i < tempTeams.length; i++) {      
       let tempIdx = j
@@ -70,19 +62,33 @@ const TeamCreator = () => {
       }
       tempGameRound[tempIdx].push(tempTeams[i])
     }
-    
+  }
+
+  const checkForErrors = () => {
     if (tempRoster.length < tempTeams.length) {
       setError(`You need more players than number of teams: Players: ${tempRoster.length}, Teams: ${tempTeams.length}`);
       return;
     }
 
     if (numberOfTeams % 2 !== 0) {
-      setError("You need an even number of teams");
+      setError("You need an even number of teams.");
       return;
     }
 
-    setError(null)
-    setTeams(tempTeams);
+    return setError(null);
+  }
+
+  const generateTeams = e => {
+    e.preventDefault();
+    
+    addPlayers();
+    createRound();
+    
+    randomRoster = randomizePlayers(tempRoster);
+
+    createTeam();
+    createGameRound();
+    checkForErrors();
     setGameRound(tempGameRound);
   };
 
@@ -106,13 +112,16 @@ const TeamCreator = () => {
         <div className="inputRow" style={{color: 'red'}}>{error}</div>
       )}
       <div>
-        {teams.map((team, idx) => (
-          <div key={team} className={(idx + 1) % 2 !== 0 ? 'teamRowTop' : 'teamRowBottom'}>
-            <div className="inputRow" key={team}><b>Team {idx + 1}:</b> {' '}
-            {team.map((player, i) => (
-              <span key={player}>{player}{i < team.length - 1 ? ', ' : null}</span>
+        {!error && gameRound.map((game, idx) => (
+          <div key={game} style={{ background: 'pink', padding: 10, marginBottom: 4}}>
+            {game.map((team, i) => (
+              <div key={team} style={{ padding: 10, backgroundColor: i === 0 ? 'yellow' : 'lime' }}>
+                <span style={{ fontSize: 22, fontWeight: 'bold' }}>Team {i + 1}: </span>
+                {team.map((player, i) => (
+                  <span key={player}>{player}{i < team.length - 1 ? ', ' : null}</span>
+                ))}
+              </div>
             ))}
-            </div>
           </div>
         ))}
       </div>
