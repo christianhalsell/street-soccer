@@ -64,6 +64,10 @@ const TeamCreator = () => {
     }
   }
 
+  const addScore = () => {
+    alert('This is not working yet.')
+  }
+
   const checkForErrors = () => {
     if (tempRoster.length < tempTeams.length) {
       setError(`You need more players than number of teams: Players: ${tempRoster.length}, Teams: ${tempTeams.length}`);
@@ -112,10 +116,15 @@ const TeamCreator = () => {
         <div className="inputRow" style={{color: 'red'}}>{error}</div>
       )}
       <div>
+        <div style={{ fontSize: 30, marginBottom: 10, fontWeight: 700 }}>Game 1</div>
         {!error && gameRound.map((game, idx) => (
-          <div key={game} style={{ background: 'pink', padding: 10, marginBottom: 4}}>
+          <div key={game} style={{ background: '#eee', padding: 10, marginBottom: 10}}>
+            <div style={{ fontSize: 26, fontWeight: 700, paddingBottom: 10 }}>
+              Field {idx + 1}
+              <button onClick={addScore} style={{ float: 'right', backgroundColor: 'green', color: 'white', border: 0, padding: '4px 10px', cursor: 'pointer' }}>Add Score</button>
+            </div>
             {game.map((team, i) => (
-              <div key={team} style={{ padding: 10, backgroundColor: i === 0 ? 'yellow' : 'lime' }}>
+              <div key={team} style={{ padding: 10, backgroundColor: i === 0 ? '#f66' : '#aaf' }}>
                 <span style={{ fontSize: 22, fontWeight: 'bold' }}>Team {i + 1}: </span>
                 {team.map((player, i) => (
                   <span key={player}>{player}{i < team.length - 1 ? ', ' : null}</span>
