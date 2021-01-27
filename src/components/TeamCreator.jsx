@@ -1,10 +1,12 @@
-import React, { useState } from 'react'
+import React, { Fragment, useState } from 'react'
 
 const TeamCreator = () => {
   const [numberOfPlayers, setNumberOfPlayers] = useState(16);
   const [numberOfTeams, setNumberOfTeams] = useState(4);
   const [gameRound, setGameRound] = useState([]);
   const [error, setError] = useState(null);
+  const [scoreKeeping, setScoreKeeping] = useState([]);
+  const [submitDisabled, setSubmitDisabled] = useState(false)
 
   let tempRoster = [];
   let tempTeams = [];
@@ -64,8 +66,10 @@ const TeamCreator = () => {
     }
   }
 
-  const addScore = () => {
-    alert('This is not working yet.')
+  // TODO: continue here
+  const addScores = e => {
+    e.preventDefault();
+    alert('TEST: Scores submitted')
   }
 
   const checkForErrors = () => {
@@ -97,15 +101,15 @@ const TeamCreator = () => {
   };
 
   return (
-    <div>
+    <div style={{padding: 10}}>
       <form onSubmit={generateTeams}>
         <div className="inputRow">
           <label><b>Number of Players: </b></label>
-          <input type="number" min="1" value={numberOfPlayers} onChange={e => setNumberOfPlayers(e.target.value)} />
+          <input type="number" min="1" value={numberOfPlayers} onChange={e => setNumberOfPlayers(parseInt(e.target.value))} />
         </div>
         <div className="inputRow">
           <label><b>Number of Teams: </b></label>
-          <input type="number" min="1" value={numberOfTeams} onChange={ e => setNumberOfTeams(e.target.value) } />
+          <input type="number" min="1" value={numberOfTeams} onChange={ e => setNumberOfTeams(parseInt(e.target.value)) } />
         </div>
         <div className="inputRow">
           <button type="submit">Click to generate teams</button>
@@ -115,27 +119,38 @@ const TeamCreator = () => {
       {error && (
         <div className="inputRow" style={{color: 'red'}}>{error}</div>
       )}
-      <div>
-        <div style={{ fontSize: 30, marginBottom: 10, fontWeight: 700 }}>Game 1</div>
-        {!error && gameRound.map((game, idx) => (
-          <div key={game} style={{ background: '#eee', padding: 10, marginBottom: 10}}>
-            <div style={{ fontSize: 26, fontWeight: 700, paddingBottom: 10 }}>
-              Field {idx + 1}
-              <button onClick={addScore} style={{ float: 'right', backgroundColor: 'green', color: 'white', border: 0, padding: '4px 10px', cursor: 'pointer' }}>Add Score</button>
-            </div>
-            {game.map((team, i) => (
-              <div key={team} style={{ padding: 10, backgroundColor: i === 0 ? '#f66' : '#aaf' }}>
-                <span style={{ fontSize: 22, fontWeight: 'bold' }}>Team {i + 1}: </span>
-                {team.map((player, i) => (
-                  <span key={player}>{player}{i < team.length - 1 ? ', ' : null}</span>
-                ))}
-              </div>
-            ))}
+  
+      {!error && gameRound.length > 0 && <div>
+        <form onSubmit={addScores}>
+          <div style={{display: 'flex', marginBottom: 10}}>
+            <div style={{ fontSize: 30, marginBottom: 10, fontWeight: 700, flex: 1 }}>Game 1</div>
+            <button type="submit" disabled={submitDisabled}>Submit Scores</button>
           </div>
-        ))}
-      </div>
+
+          {!error && gameRound.map((game, idx) => (
+            <div key={game} style={{ background: '#eee', padding: 10, marginBottom: 10}}>
+              <div style={{ fontSize: 26, fontWeight: 700, paddingBottom: 10 }}>
+                Field {idx + 1}
+              </div>
+              {game.map((team, i) => (
+                <div key={team} style={{display: 'flex', alignItems: 'center', padding: 10, backgroundColor: i === 0 ? '#f66' : '#aaf' }}>
+                  <div style={{flex: 1}}>  
+                    <span style={{ fontSize: 22, fontWeight: 'bold' }}>Team {i + 1}: </span>
+                    {team.map((player, i) => (
+                      <span key={player}>{player}{i < team.length - 1 ? ', ' : null}</span>
+                    ))}
+                  </div>
+                  <div style={{flex: 1, textAlign: 'right'}}>
+                    <input style={{fontSize: 28, width: 50, height:50, textAlign: 'center'}} name={`player${i}`} type="number" min="0" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          ))}
+        </form>
+      </div>}
     </div>
   )
-}
+};
 
 export default TeamCreator
