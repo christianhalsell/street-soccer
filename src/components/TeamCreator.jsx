@@ -1,17 +1,48 @@
-import React, { Fragment, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 const TeamCreator = () => {
   const [numberOfPlayers, setNumberOfPlayers] = useState(16);
   const [numberOfTeams, setNumberOfTeams] = useState(4);
   const [gameRound, setGameRound] = useState([]);
   const [error, setError] = useState(null);
-  const [scoreKeeping, setScoreKeeping] = useState([]);
-  const [submitDisabled, setSubmitDisabled] = useState(false)
+  const [roundNumber, setRoundNumber] = useState(1);
+  const [roundScore, setRoundScore] = useState([]);
+  const [totalScore, setTotalScore] = useState([]);
+  const [submitDisabled, setSubmitDisabled] = useState(true)
 
   let tempRoster = [];
   let tempTeams = [];
+  let tempScores = [];
   let tempGameRound = [];
   let randomRoster;
+
+  useEffect(() => {
+    console.log(roundScore);
+  }, [roundScore]);
+
+  const tempScore = e => {
+    e.preventDefault();
+    const newScoreArray = [...roundScore];
+    newScoreArray[e.target.getAttribute('data-field')][e.target.getAttribute('data-team')] = parseInt(e.target.value, 10);
+
+    setRoundScore([...newScoreArray])
+    checkForEmptyScores();
+  }
+
+  const checkForEmptyScores = () => {
+    console.log(`roundScore: ${roundScore}`)
+    let emptyScoreCheck = false;
+
+    for (let i = 0; i < roundScore.length; i++) {
+        console.log(`roundScore length: ${roundScore[i].length}`);
+       
+        if (roundScore[i].length < 2) {
+          emptyScoreCheck = true
+        }  
+    }
+    
+    setSubmitDisabled(emptyScoreCheck);
+  }
 
   const addPlayers = () => {
     tempRoster = [];
@@ -22,12 +53,15 @@ const TeamCreator = () => {
 
   const createRound = () => {
     tempTeams = [];
+    tempScores = [];
+
     for (let i = 0; i < numberOfTeams; i++) {
       tempTeams.push([]);
     }
 
     for (let i = 0; i < numberOfTeams / 2; i++) {
       tempGameRound.push([])
+      tempScores.push([]);
     }
   };
 
@@ -97,6 +131,7 @@ const TeamCreator = () => {
     createTeam();
     createGameRound();
     checkForErrors();
+    setRoundScore(tempScores)
     setGameRound(tempGameRound);
   };
 
@@ -120,35 +155,45 @@ const TeamCreator = () => {
         <div className="inputRow" style={{color: 'red'}}>{error}</div>
       )}
   
-      {!error && gameRound.length > 0 && <div>
-        <form onSubmit={addScores}>
-          <div style={{display: 'flex', marginBottom: 10}}>
-            <div style={{ fontSize: 30, marginBottom: 10, fontWeight: 700, flex: 1 }}>Game 1</div>
-            <button type="submit" disabled={submitDisabled}>Submit Scores</button>
-          </div>
-
-          {!error && gameRound.map((game, idx) => (
-            <div key={game} style={{ background: '#eee', padding: 10, marginBottom: 10}}>
-              <div style={{ fontSize: 26, fontWeight: 700, paddingBottom: 10 }}>
-                Field {idx + 1}
-              </div>
-              {game.map((team, i) => (
-                <div key={team} style={{display: 'flex', alignItems: 'center', padding: 10, backgroundColor: i === 0 ? '#f66' : '#aaf' }}>
-                  <div style={{flex: 1}}>  
-                    <span style={{ fontSize: 22, fontWeight: 'bold' }}>Team {i + 1}: </span>
-                    {team.map((player, i) => (
-                      <span key={player}>{player}{i < team.length - 1 ? ', ' : null}</span>
-                    ))}
-                  </div>
-                  <div style={{flex: 1, textAlign: 'right'}}>
-                    <input style={{fontSize: 28, width: 50, height:50, textAlign: 'center'}} name={`player${i}`} type="number" min="0" />
-                  </div>
-                </div>
-              ))}
+      {!error && gameRound.length > 0 &&
+        <div>
+          <form onSubmit={addScores}>
+            <div style={{display: 'flex', marginBottom: 10}}>
+              <div style={{ fontSize: 30, marginBottom: 10, fontWeight: 700, flex: 1 }}>Game {roundNumber}</div>
+              <button type="submit" disabled={submitDisabled}>Submit Scores</button>
             </div>
-          ))}
-        </form>
-      </div>}
+
+            {!error && gameRound.map((game, idx) => (
+              <div key={game} style={{ background: '#eee', padding: 10, marginBottom: 10}}>
+                <div style={{ fontSize: 26, fontWeight: 700, paddingBottom: 10 }}>
+                  Field {idx + 1}
+                </div>
+                {game.map((team, i) => (
+                  <div key={team} style={{display: 'flex', alignItems: 'center', padding: 10, backgroundColor: i === 0 ? '#f66' : '#aaf' }}>
+                    <div style={{flex: 1}}>  
+                      <span style={{ fontSize: 22, fontWeight: 'bold' }}>Team {i + 1}: </span>
+                      {team.map((player, i) => (
+                        <span key={player}>{player}{i < team.length - 1 ? ', ' : null}</span>
+                      ))}
+                    </div>
+                    <div style={{flex: 1, textAlign: 'right'}}>
+                      <input 
+                        style={{fontSize: 28, width: 50, height:50, textAlign: 'center'}} 
+                        // name={`Field`} 
+                        data-field={idx}
+                        data-team={i}
+                        type="number" 
+                        min="0"
+                        onChange={tempScore}
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ))}
+          </form>
+        </div>
+      }
     </div>
   )
 };
