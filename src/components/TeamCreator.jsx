@@ -8,6 +8,7 @@ const TeamCreator = () => {
   const [roundNumber, setRoundNumber] = useState(0);
   const [roundScore, setRoundScore] = useState([]);
   const [totalScore, setTotalScore] = useState([]);
+  // const [finalScores, setFinalScores] = useState({});
   const [submitDisabled, setSubmitDisabled] = useState(true)
 
   const SCORE_WIN = 3;
@@ -35,11 +36,11 @@ const TeamCreator = () => {
   }
 
   const checkForEmptyScores = () => {
-    console.log(`roundScore: ${roundScore}`)
+    // console.log(`roundScore: ${roundScore}`)
     let emptyScoreCheck = false;
 
     for (let i = 0; i < roundScore.length; i++) {
-        console.log(`roundScore length: ${roundScore[i].length}`);
+        // console.log(`roundScore length: ${roundScore[i].length}`);
        
         if (roundScore[i].length < 2) {
           emptyScoreCheck = true
@@ -110,37 +111,44 @@ const TeamCreator = () => {
   const addScores = e => {
     e.preventDefault();
     const teamObj = {};
-
     
     for (let x = 0; x < numberOfPlayers; x++) {
       teamObj["player" + (x + 1)] = {};
     }
   
-    for (let i = 0; i < roundScore.length; i++) {    
-      // bug here when first team has one more player than the second team
+    for (let i = 0; i < roundScore.length; i++) {
       if (roundScore[i][0] === roundScore[i][1]) {
         console.log('It\'s a tie');
-        for (let j = 0; j < gameRound[i][1].length; j++) {
+
+        for (let j = 0; j < gameRound[i][0].length; j++) {
           const firstTeam = gameRound[i][0][j];
-          const secondTeam = gameRound[i][1][j];
           teamObj["player" + firstTeam].score = SCORE_TIE;
+          teamObj["player" + firstTeam].score = SCORE_TIE;
+        }
+        for (let j = 0; j < gameRound[i][1].length; j++) {
+          const secondTeam = gameRound[i][1][j];
           teamObj["player" + secondTeam].score = SCORE_TIE;
         }
       } else if (roundScore[i][0] < roundScore[i][1]) {
-        console.log('Second Team Won');        
-        for (let j = 0; j < gameRound[i][1].length; j++) {
+        console.log('Second Team Won');
+
+        for (let j = 0; j < gameRound[i][0].length; j++) {
           const firstTeam = gameRound[i][0][j];
-          const secondTeam = gameRound[i][1][j];
           teamObj["player" + firstTeam].score = SCORE_LOSS;
+        }
+        for (let j = 0; j < gameRound[i][1].length; j++) {
+          const secondTeam = gameRound[i][1][j];
           teamObj["player" + secondTeam].score = SCORE_WIN;
         }
       } else if (roundScore[i][0] > roundScore[i][1]) {
-          console.log('First Team won')
-        for (let j = 0; j < gameRound[i][1].length; j++) {
-          const firstTeam = gameRound[i][0][j];
-          const secondTeam = gameRound[i][1][j];
-          
+        console.log('First Team won');
+
+        for (let j = 0; j < gameRound[i][0].length; j++) {
+          const firstTeam = gameRound[i][0][j];          
           teamObj["player" + firstTeam].score = SCORE_WIN;
+        }
+        for (let j = 0; j < gameRound[i][1].length; j++) {
+          const secondTeam = gameRound[i][1][j];
           teamObj["player" + secondTeam].score = SCORE_LOSS;
         }
       }
@@ -195,7 +203,7 @@ const TeamCreator = () => {
           <input type="number" min="1" value={numberOfTeams} onChange={ e => setNumberOfTeams(parseInt(e.target.value)) } />
         </div>
         <div className="inputRow">
-          <button type="submit">Click to generate teams</button>
+          <button type="submit">Start Round</button>
         </div>
       </form>
       <br />
