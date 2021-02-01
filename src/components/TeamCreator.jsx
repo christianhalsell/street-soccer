@@ -8,7 +8,7 @@ const TeamCreator = () => {
   const [roundNumber, setRoundNumber] = useState(0);
   const [roundScore, setRoundScore] = useState([]);
   const [totalScore, setTotalScore] = useState([]);
-  // const [finalScores, setFinalScores] = useState({});
+  const [finalScores, setFinalScores] = useState({});
   const [submitDisabled, setSubmitDisabled] = useState(true)
 
   const SCORE_WIN = 3;
@@ -122,7 +122,6 @@ const TeamCreator = () => {
 
         for (let j = 0; j < gameRound[i][0].length; j++) {
           const firstTeam = gameRound[i][0][j];
-          teamObj["player" + firstTeam].score = SCORE_TIE;
           teamObj["player" + firstTeam].score = SCORE_TIE;
         }
         for (let j = 0; j < gameRound[i][1].length; j++) {
