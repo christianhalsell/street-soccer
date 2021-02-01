@@ -5,7 +5,7 @@ const TeamCreator = () => {
   const [numberOfTeams, setNumberOfTeams] = useState(4);
   const [gameRound, setGameRound] = useState([]);
   const [error, setError] = useState(null);
-  const [roundNumber, setRoundNumber] = useState(1);
+  const [roundNumber, setRoundNumber] = useState(0);
   const [roundScore, setRoundScore] = useState([]);
   const [totalScore, setTotalScore] = useState([]);
   const [submitDisabled, setSubmitDisabled] = useState(true)
@@ -17,10 +17,11 @@ const TeamCreator = () => {
   let randomRoster;
 
   useEffect(() => {
-    console.log(roundScore);
-  }, [roundScore]);
+    console.log(totalScore);
+  }, [totalScore]);
 
-  const tempScore = e => {
+  // Add score to roundScore while entering
+  const addScore = e => {
     e.preventDefault();
     const newScoreArray = [...roundScore];
     newScoreArray[e.target.getAttribute('data-field')][e.target.getAttribute('data-team')] = parseInt(e.target.value, 10);
@@ -52,6 +53,7 @@ const TeamCreator = () => {
   };
 
   const createRound = () => {
+    // clear tempteams and scores when creating a new round    
     tempTeams = [];
     tempScores = [];
 
@@ -100,9 +102,41 @@ const TeamCreator = () => {
     }
   }
 
-  // TODO: continue here
+  // Add round scores to gamesheet
   const addScores = e => {
     e.preventDefault();
+    const teamObj = {};
+
+    
+    for (let x = 0; x < numberOfPlayers; x++) {
+      teamObj["player" + (x + 1)] = {};
+    }
+  
+    for (let i = 0; i < roundScore.length; i++) {    
+      if (roundScore[i][0] < roundScore[i][1]) {
+        console.log('Second Team Won');
+        // bug here when first team has one more player than the second team
+        for (let j = 0; j < gameRound[i][1].length; j++) {
+          const firstTeam = gameRound[i][0][j];
+          const secondTeam = gameRound[i][1][j];
+          teamObj["player" + firstTeam].score = 0;
+          teamObj["player" + secondTeam].score = 6;
+        }
+      } else if (roundScore[i][0] > roundScore[i][1]) {
+          console.log('First Team won')
+        for (let j = 0; j < gameRound[i][1].length; j++) {
+          const firstTeam = gameRound[i][0][j];
+          const secondTeam = gameRound[i][1][j];
+          
+          teamObj["player" + firstTeam].score = 6;
+          teamObj["player" + secondTeam].score = 0;
+        }
+      }
+    }
+  
+    const tempArray = [...totalScore]
+    tempArray.push(teamObj);
+    setTotalScore(tempArray);
     alert('TEST: Scores submitted')
   }
 
@@ -122,7 +156,9 @@ const TeamCreator = () => {
 
   const generateTeams = e => {
     e.preventDefault();
-    
+    setSubmitDisabled(true);
+    setRoundNumber(roundNumber + 1);
+
     addPlayers();
     createRound();
     
@@ -184,7 +220,7 @@ const TeamCreator = () => {
                         data-team={i}
                         type="number" 
                         min="0"
-                        onChange={tempScore}
+                        onChange={addScore}
                       />
                     </div>
                   </div>
