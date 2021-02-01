@@ -2,14 +2,15 @@ import React, { useEffect, useState } from 'react'
 
 const TeamCreator = () => {
   const [numberOfPlayers, setNumberOfPlayers] = useState(16);
-  const [numberOfTeams, setNumberOfTeams] = useState(4);
+  const [numberOfTeams, setNumberOfTeams] = useState(2);
   const [gameRound, setGameRound] = useState([]);
   const [error, setError] = useState(null);
   const [roundNumber, setRoundNumber] = useState(0);
   const [roundScore, setRoundScore] = useState([]);
   const [totalScore, setTotalScore] = useState([]);
   const [finalScores, setFinalScores] = useState({});
-  const [submitDisabled, setSubmitDisabled] = useState(true)
+  const [submitDisabled, setSubmitDisabled] = useState(true);
+  const [endGameDisabled, setEndGameDisabled] = useState(true);
 
   const SCORE_WIN = 3;
   const SCORE_TIE = 2;
@@ -22,8 +23,12 @@ const TeamCreator = () => {
   let randomRoster;
 
   useEffect(() => {
-    console.log(totalScore);
+    console.log(`totalScore: ${totalScore}`);
   }, [totalScore]);
+
+  useEffect(() => {
+    console.log(`finalScores: ${finalScores}`);
+  }, [finalScores]);
 
   // Add score to roundScore while entering
   const addScore = e => {
@@ -111,9 +116,14 @@ const TeamCreator = () => {
   const addScores = e => {
     e.preventDefault();
     const teamObj = {};
-    
+    const tempFinalObj = {...finalScores};
+
     for (let x = 0; x < numberOfPlayers; x++) {
       teamObj["player" + (x + 1)] = {};
+      
+      if (!tempFinalObj["player" + (x + 1)]) {
+        tempFinalObj["player" + (x + 1)] = 0
+      }
     }
   
     for (let i = 0; i < roundScore.length; i++) {
@@ -123,10 +133,12 @@ const TeamCreator = () => {
         for (let j = 0; j < gameRound[i][0].length; j++) {
           const firstTeam = gameRound[i][0][j];
           teamObj["player" + firstTeam].score = SCORE_TIE;
+          tempFinalObj["player" + firstTeam] += SCORE_TIE;
         }
         for (let j = 0; j < gameRound[i][1].length; j++) {
           const secondTeam = gameRound[i][1][j];
           teamObj["player" + secondTeam].score = SCORE_TIE;
+          tempFinalObj["player" + secondTeam] += SCORE_TIE;
         }
       } else if (roundScore[i][0] < roundScore[i][1]) {
         console.log('Second Team Won');
@@ -134,10 +146,12 @@ const TeamCreator = () => {
         for (let j = 0; j < gameRound[i][0].length; j++) {
           const firstTeam = gameRound[i][0][j];
           teamObj["player" + firstTeam].score = SCORE_LOSS;
+          tempFinalObj["player" + firstTeam] += SCORE_LOSS;
         }
         for (let j = 0; j < gameRound[i][1].length; j++) {
           const secondTeam = gameRound[i][1][j];
           teamObj["player" + secondTeam].score = SCORE_WIN;
+          tempFinalObj["player" + secondTeam] += SCORE_WIN;
         }
       } else if (roundScore[i][0] > roundScore[i][1]) {
         console.log('First Team won');
@@ -145,10 +159,12 @@ const TeamCreator = () => {
         for (let j = 0; j < gameRound[i][0].length; j++) {
           const firstTeam = gameRound[i][0][j];          
           teamObj["player" + firstTeam].score = SCORE_WIN;
+          tempFinalObj["player" + firstTeam] += SCORE_WIN;
         }
         for (let j = 0; j < gameRound[i][1].length; j++) {
           const secondTeam = gameRound[i][1][j];
           teamObj["player" + secondTeam].score = SCORE_LOSS;
+          tempFinalObj["player" + secondTeam] += SCORE_LOSS;
         }
       }
     }
@@ -156,7 +172,9 @@ const TeamCreator = () => {
     const tempArray = [...totalScore]
     tempArray.push(teamObj);
     setTotalScore(tempArray);
+    setFinalScores(tempFinalObj)
     setSubmitDisabled(true);
+    setEndGameDisabled(false)
     alert('TEST: Scores submitted')
   }
 
@@ -172,7 +190,7 @@ const TeamCreator = () => {
     }
 
     return setError(null);
-  }
+  };
 
   const generateTeams = e => {
     e.preventDefault();
@@ -190,6 +208,10 @@ const TeamCreator = () => {
     setGameRound(tempGameRound);
   };
 
+  const endGame = () => {
+    alert('TEST: End game');
+  }
+
   return (
     <div style={{padding: 10}}>
       <form onSubmit={generateTeams}>
@@ -203,6 +225,7 @@ const TeamCreator = () => {
         </div>
         <div className="inputRow">
           <button type="submit">Start Round</button>
+          <button onClick={endGame} type="button" disabled={endGameDisabled}>End Game</button>
         </div>
       </form>
       <br />
