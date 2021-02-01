@@ -7,22 +7,3 @@ input {
 input {
   display: inline-block;
 }
-
-/* .inputRow {
-  padding: 10px;
-}
-
-.inputRow:nth-child(2n) {
-  margin-bottom: 10px;
-}
-
-.teamRowTop,
-.teamRowBottom {
-  background-color: #ddd;
-  padding: 20px;
-}
-
-.teamRowBottom {
-  margin-bottom: 20px;
-  padding-top: 0;
-} */

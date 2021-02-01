@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 
 const TeamCreator = () => {
   const [numberOfPlayers, setNumberOfPlayers] = useState(16);
-  const [numberOfTeams, setNumberOfTeams] = useState(2);
+  const [numberOfTeams, setNumberOfTeams] = useState(4);
   const [gameRound, setGameRound] = useState([]);
   const [error, setError] = useState(null);
   const [roundNumber, setRoundNumber] = useState(0);
@@ -119,10 +119,10 @@ const TeamCreator = () => {
     const tempFinalObj = {...finalScores};
 
     for (let x = 0; x < numberOfPlayers; x++) {
-      teamObj["player" + (x + 1)] = {};
+      teamObj["Player #" + (x + 1)] = {};
       
-      if (!tempFinalObj["player" + (x + 1)]) {
-        tempFinalObj["player" + (x + 1)] = 0
+      if (!tempFinalObj["Player #" + (x + 1)]) {
+        tempFinalObj["Player #" + (x + 1)] = 0
       }
     }
   
@@ -132,39 +132,39 @@ const TeamCreator = () => {
 
         for (let j = 0; j < gameRound[i][0].length; j++) {
           const firstTeam = gameRound[i][0][j];
-          teamObj["player" + firstTeam].score = SCORE_TIE;
-          tempFinalObj["player" + firstTeam] += SCORE_TIE;
+          teamObj["Player #" + firstTeam].score = SCORE_TIE;
+          tempFinalObj["Player #" + firstTeam] += SCORE_TIE;
         }
         for (let j = 0; j < gameRound[i][1].length; j++) {
           const secondTeam = gameRound[i][1][j];
-          teamObj["player" + secondTeam].score = SCORE_TIE;
-          tempFinalObj["player" + secondTeam] += SCORE_TIE;
+          teamObj["Player #" + secondTeam].score = SCORE_TIE;
+          tempFinalObj["Player #" + secondTeam] += SCORE_TIE;
         }
       } else if (roundScore[i][0] < roundScore[i][1]) {
         console.log('Second Team Won');
 
         for (let j = 0; j < gameRound[i][0].length; j++) {
           const firstTeam = gameRound[i][0][j];
-          teamObj["player" + firstTeam].score = SCORE_LOSS;
-          tempFinalObj["player" + firstTeam] += SCORE_LOSS;
+          teamObj["Player #" + firstTeam].score = SCORE_LOSS;
+          tempFinalObj["Player #" + firstTeam] += SCORE_LOSS;
         }
         for (let j = 0; j < gameRound[i][1].length; j++) {
           const secondTeam = gameRound[i][1][j];
-          teamObj["player" + secondTeam].score = SCORE_WIN;
-          tempFinalObj["player" + secondTeam] += SCORE_WIN;
+          teamObj["Player #" + secondTeam].score = SCORE_WIN;
+          tempFinalObj["Player #" + secondTeam] += SCORE_WIN;
         }
       } else if (roundScore[i][0] > roundScore[i][1]) {
         console.log('First Team won');
 
         for (let j = 0; j < gameRound[i][0].length; j++) {
           const firstTeam = gameRound[i][0][j];          
-          teamObj["player" + firstTeam].score = SCORE_WIN;
-          tempFinalObj["player" + firstTeam] += SCORE_WIN;
+          teamObj["Player #" + firstTeam].score = SCORE_WIN;
+          tempFinalObj["Player #" + firstTeam] += SCORE_WIN;
         }
         for (let j = 0; j < gameRound[i][1].length; j++) {
           const secondTeam = gameRound[i][1][j];
-          teamObj["player" + secondTeam].score = SCORE_LOSS;
-          tempFinalObj["player" + secondTeam] += SCORE_LOSS;
+          teamObj["Player #" + secondTeam].score = SCORE_LOSS;
+          tempFinalObj["Player #" + secondTeam] += SCORE_LOSS;
         }
       }
     }
@@ -256,8 +256,7 @@ const TeamCreator = () => {
                     </div>
                     <div style={{flex: 1, textAlign: 'right'}}>
                       <input 
-                        style={{fontSize: 28, width: 50, height:50, textAlign: 'center'}} 
-                        // name={`Field`} 
+                        style={{fontSize: 28, width: 50, height:50, textAlign: 'center'}}
                         data-field={idx}
                         data-team={i}
                         type="number" 
@@ -270,6 +269,12 @@ const TeamCreator = () => {
               </div>
             ))}
           </form>
+          
+          { 
+            Object.keys(finalScores).map(item => {
+              return <div key={item}><span>{item}: {finalScores[item]}</span></div>
+            })
+          }
         </div>
       }
     </div>
