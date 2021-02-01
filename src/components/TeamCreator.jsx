@@ -10,6 +10,10 @@ const TeamCreator = () => {
   const [totalScore, setTotalScore] = useState([]);
   const [submitDisabled, setSubmitDisabled] = useState(true)
 
+  const SCORE_WIN = 3;
+  const SCORE_TIE = 2;
+  const SCORE_LOSS = 1
+
   let tempRoster = [];
   let tempTeams = [];
   let tempScores = [];
@@ -113,14 +117,22 @@ const TeamCreator = () => {
     }
   
     for (let i = 0; i < roundScore.length; i++) {    
-      if (roundScore[i][0] < roundScore[i][1]) {
-        console.log('Second Team Won');
-        // bug here when first team has one more player than the second team
+      // bug here when first team has one more player than the second team
+      if (roundScore[i][0] === roundScore[i][1]) {
+        console.log('It\'s a tie');
         for (let j = 0; j < gameRound[i][1].length; j++) {
           const firstTeam = gameRound[i][0][j];
           const secondTeam = gameRound[i][1][j];
-          teamObj["player" + firstTeam].score = 0;
-          teamObj["player" + secondTeam].score = 6;
+          teamObj["player" + firstTeam].score = SCORE_TIE;
+          teamObj["player" + secondTeam].score = SCORE_TIE;
+        }
+      } else if (roundScore[i][0] < roundScore[i][1]) {
+        console.log('Second Team Won');        
+        for (let j = 0; j < gameRound[i][1].length; j++) {
+          const firstTeam = gameRound[i][0][j];
+          const secondTeam = gameRound[i][1][j];
+          teamObj["player" + firstTeam].score = SCORE_LOSS;
+          teamObj["player" + secondTeam].score = SCORE_WIN;
         }
       } else if (roundScore[i][0] > roundScore[i][1]) {
           console.log('First Team won')
@@ -128,8 +140,8 @@ const TeamCreator = () => {
           const firstTeam = gameRound[i][0][j];
           const secondTeam = gameRound[i][1][j];
           
-          teamObj["player" + firstTeam].score = 6;
-          teamObj["player" + secondTeam].score = 0;
+          teamObj["player" + firstTeam].score = SCORE_WIN;
+          teamObj["player" + secondTeam].score = SCORE_LOSS;
         }
       }
     }
@@ -137,6 +149,7 @@ const TeamCreator = () => {
     const tempArray = [...totalScore]
     tempArray.push(teamObj);
     setTotalScore(tempArray);
+    setSubmitDisabled(true);
     alert('TEST: Scores submitted')
   }
 
@@ -156,7 +169,6 @@ const TeamCreator = () => {
 
   const generateTeams = e => {
     e.preventDefault();
-    setSubmitDisabled(true);
     setRoundNumber(roundNumber + 1);
 
     addPlayers();
@@ -195,7 +207,7 @@ const TeamCreator = () => {
         <div>
           <form onSubmit={addScores}>
             <div style={{display: 'flex', marginBottom: 10}}>
-              <div style={{ fontSize: 30, marginBottom: 10, fontWeight: 700, flex: 1 }}>Game {roundNumber}</div>
+              <div style={{ fontSize: 30, marginBottom: 10, fontWeight: 700, flex: 1 }}>Round {roundNumber}</div>
               <button type="submit" disabled={submitDisabled}>Submit Scores</button>
             </div>
 
