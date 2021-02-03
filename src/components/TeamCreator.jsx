@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from 'react'
+import React, { useEffect, useState } from 'react'
 
 const TeamCreator = () => {
   const [numberOfPlayers, setNumberOfPlayers] = useState(16);
@@ -9,8 +9,9 @@ const TeamCreator = () => {
   const [roundScore, setRoundScore] = useState([]);
   const [totalScore, setTotalScore] = useState([]);
   const [finalScores, setFinalScores] = useState({});
+  const [startRoundDisabled, setStartRoundDisabled] = useState(false);
   const [submitDisabled, setSubmitDisabled] = useState(true);
-  const [endGameDisabled, setEndGameDisabled] = useState(true);
+  // const [endGameDisabled, setEndGameDisabled] = useState(true);
   const [highestScore, setHighestScore] = useState(-1);
 
   const SCORE_WIN = 3;
@@ -171,8 +172,8 @@ const TeamCreator = () => {
     setFinalScores(tempFinalObj);
 
     setSubmitDisabled(true);
-    setEndGameDisabled(false)
-    alert('TEST: Scores submitted')
+    // setEndGameDisabled(false);
+    setStartRoundDisabled(false);
   }
 
   const checkForErrors = () => {
@@ -203,11 +204,12 @@ const TeamCreator = () => {
     checkForErrors();
     setRoundScore(tempScores)
     setGameRound(tempGameRound);
+    setStartRoundDisabled(true);
   };
 
-  const endGame = () => {
-    alert('TEST: End game');
-  }
+  // const endGame = () => {
+  //   alert('TEST: End game');
+  // }
 
   return (
     <div style={{padding: 10}}>
@@ -221,7 +223,7 @@ const TeamCreator = () => {
           <input type="number" min="1" value={numberOfTeams} onChange={ e => setNumberOfTeams(parseInt(e.target.value)) } />
         </div>
         <div className="inputRow">
-          <button type="submit">Start Round</button>
+          <button disabled={startRoundDisabled} style={{ fontSize: 24, marginBottom: 10, fontWeight: 700}} type="submit">Start Round</button>
           {/* <button onClick={endGame} type="button" disabled={endGameDisabled}>End Game</button> */}
         </div>
       </form>
@@ -235,7 +237,7 @@ const TeamCreator = () => {
           <form onSubmit={addScores}>
             <div style={{display: 'flex', marginBottom: 10}}>
               <div style={{ fontSize: 30, marginBottom: 10, fontWeight: 700, flex: 1 }}>Round {roundNumber}</div>
-              <button type="submit" disabled={submitDisabled}>Submit Scores</button>
+              {/* <button type="submit" disabled={submitDisabled}>Submit Scores</button> */}
             </div>
 
             {!error && gameRound.map((game, idx) => (
@@ -265,6 +267,10 @@ const TeamCreator = () => {
                 ))}
               </div>
             ))}
+            <div style={{display: 'flex', marginBottom: 10}}>
+              <div style={{ fontSize: 30, marginBottom: 10, fontWeight: 700, flex: 1 }}></div>
+              <button style={{ fontSize: 24, marginBottom: 10, fontWeight: 700}} type="submit" disabled={submitDisabled}>Submit Scores</button>
+            </div>
           </form>
           
           { 
