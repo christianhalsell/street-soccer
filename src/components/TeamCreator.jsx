@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useMemo } from 'react'
 
 const TeamCreator = () => {
   const [numberOfPlayers, setNumberOfPlayers] = useState(16);
@@ -11,6 +11,7 @@ const TeamCreator = () => {
   const [finalScores, setFinalScores] = useState({});
   const [submitDisabled, setSubmitDisabled] = useState(true);
   const [endGameDisabled, setEndGameDisabled] = useState(true);
+  const [highestScore, setHighestScore] = useState(-1);
 
   const SCORE_WIN = 3;
   const SCORE_TIE = 2;
@@ -22,12 +23,10 @@ const TeamCreator = () => {
   let tempGameRound = [];
   let randomRoster;
 
+  // Find highest score
   useEffect(() => {
-    console.log(`totalScore: ${totalScore}`);
-  }, [totalScore]);
-
-  useEffect(() => {
-    console.log(`finalScores: ${finalScores}`);
+    let highestScore = Object.values(finalScores).sort((a, b) => a - b);
+    setHighestScore(highestScore[highestScore.length - 1]);
   }, [finalScores]);
 
   // Add score to roundScore while entering
@@ -41,12 +40,9 @@ const TeamCreator = () => {
   }
 
   const checkForEmptyScores = () => {
-    // console.log(`roundScore: ${roundScore}`)
     let emptyScoreCheck = false;
 
-    for (let i = 0; i < roundScore.length; i++) {
-        // console.log(`roundScore length: ${roundScore[i].length}`);
-       
+    for (let i = 0; i < roundScore.length; i++) {       
         if (roundScore[i].length < 2) {
           emptyScoreCheck = true
         }  
@@ -117,6 +113,7 @@ const TeamCreator = () => {
     e.preventDefault();
     const teamObj = {};
     const tempFinalObj = {...finalScores};
+    const tempArray = [...totalScore];
 
     for (let x = 0; x < numberOfPlayers; x++) {
       teamObj["Player #" + (x + 1)] = {};
@@ -167,12 +164,12 @@ const TeamCreator = () => {
           tempFinalObj["Player #" + secondTeam] += SCORE_LOSS;
         }
       }
-    }
-  
-    const tempArray = [...totalScore]
+    }  
+    
     tempArray.push(teamObj);
     setTotalScore(tempArray);
-    setFinalScores(tempFinalObj)
+    setFinalScores(tempFinalObj);
+
     setSubmitDisabled(true);
     setEndGameDisabled(false)
     alert('TEST: Scores submitted')
@@ -225,7 +222,7 @@ const TeamCreator = () => {
         </div>
         <div className="inputRow">
           <button type="submit">Start Round</button>
-          <button onClick={endGame} type="button" disabled={endGameDisabled}>End Game</button>
+          {/* <button onClick={endGame} type="button" disabled={endGameDisabled}>End Game</button> */}
         </div>
       </form>
       <br />
@@ -248,7 +245,7 @@ const TeamCreator = () => {
                 </div>
                 {game.map((team, i) => (
                   <div key={team} style={{display: 'flex', alignItems: 'center', padding: 10, backgroundColor: i === 0 ? '#f66' : '#aaf' }}>
-                    <div style={{flex: 1}}>  
+                    <div style={{flex: 4}}>  
                       <span style={{ fontSize: 22, fontWeight: 'bold' }}>Team {i + 1}: </span>
                       {team.map((player, i) => (
                         <span key={player}>{player}{i < team.length - 1 ? ', ' : null}</span>
@@ -272,7 +269,8 @@ const TeamCreator = () => {
           
           { 
             Object.keys(finalScores).map(item => {
-              return <div key={item}><span>{item}: {finalScores[item]}</span></div>
+              const highlight = finalScores[item] === highestScore ? 'highlight' : '';
+              return <div key={item}><span className={highlight}>{item}: {finalScores[item]}</span></div>
             })
           }
         </div>
