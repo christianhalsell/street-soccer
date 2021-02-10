@@ -9,6 +9,7 @@ const TeamCreator = () => {
   const [roundScore, setRoundScore] = useState([]);
   const [totalScore, setTotalScore] = useState([]);
   const [finalScores, setFinalScores] = useState({});
+  const [finalScoresOrdered, setFinalScoresOrdered] = useState([]);
   const [startRoundDisabled, setStartRoundDisabled] = useState(false);
   const [submitDisabled, setSubmitDisabled] = useState(true);
   // const [endGameDisabled, setEndGameDisabled] = useState(true);
@@ -29,6 +30,10 @@ const TeamCreator = () => {
     let highestScore = Object.values(finalScores).sort((a, b) => a - b);
     setHighestScore(highestScore[highestScore.length - 1]);
   }, [finalScores]);
+
+  useEffect(() => {
+    console.log(finalScoresOrdered)
+  }, [finalScoresOrdered])
 
   // Add score to roundScore while entering
   const addScore = e => {
@@ -109,12 +114,23 @@ const TeamCreator = () => {
     }
   }
 
+  const sortFinalScores = scoreObj => {
+    let sortable = [];
+    for (let key in scoreObj) {
+      sortable.push([key, scoreObj[key]])
+    }
+    
+    const sorted = sortable.sort((a, b) => b[1] - a[1]);
+    return sorted;
+  }
+
   // Add round scores to gamesheet
   const addScores = e => {
     e.preventDefault();
     const teamObj = {};
     const tempFinalObj = {...finalScores};
     const tempArray = [...totalScore];
+    let sortedScores;
 
     for (let x = 0; x < numberOfPlayers; x++) {
       teamObj["Player #" + (x + 1)] = {};
@@ -170,6 +186,18 @@ const TeamCreator = () => {
     tempArray.push(teamObj);
     setTotalScore(tempArray);
     setFinalScores(tempFinalObj);
+
+    sortedScores = sortFinalScores(tempFinalObj)
+    setFinalScoresOrdered(sortedScores);
+
+    // orderFinalScores
+    // let sortable = [];
+    // for (let key in tempFinalObj) {
+    //   sortable.push([key, tempFinalObj[key]])
+    // }
+    
+    // const sorted = sortable.sort((a, b) => b[1] - a[1]);
+    // END
 
     setSubmitDisabled(true);
     setStartRoundDisabled(false);
@@ -266,12 +294,26 @@ const TeamCreator = () => {
             </div>
           </form>
           
-          { 
-            Object.keys(finalScores).map(item => {
-              const highlight = finalScores[item] === highestScore ? 'highlight' : '';
-              return <div key={item}><span className={highlight}>{item}: {finalScores[item]}</span></div>
-            })
-          }
+          <div style={{display: 'flex'}}>
+            <div style={{flex: 1}}>
+              <h3>Ordered by Player:</h3>
+              {
+                Object.keys(finalScores).map(item => {
+                  const highlight = finalScores[item] === highestScore ? 'highlight' : '';
+                  return <div key={item}><span className={highlight}>{item}: {finalScores[item]}</span></div>
+                })
+              }
+            </div>
+            <div style={{flex: 1}}>
+              <h3>Ordered by Points:</h3>
+              {
+                finalScoresOrdered.map(item => (
+                  <div key={item[0]}>{item[0]}: {item[1]}</div>
+                ))
+              }
+            </div>
+          </div>
+
         </div>
       }
     </div>
