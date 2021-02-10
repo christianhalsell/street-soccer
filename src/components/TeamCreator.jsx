@@ -294,26 +294,28 @@ const TeamCreator = () => {
             </div>
           </form>
           
-          <div style={{display: 'flex'}}>
-            <div style={{flex: 1}}>
-              <h3>Ordered by Player:</h3>
-              {
-                Object.keys(finalScores).map(item => {
-                  const highlight = finalScores[item] === highestScore ? 'highlight' : '';
-                  return <div key={item}><span className={highlight}>{item}: {finalScores[item]}</span></div>
-                })
-              }
+          {/* TODO: change how this is displayed...eventually */}
+          {!startRoundDisabled && (
+            <div style={{display: 'flex'}}>
+              <div style={{flex: 1}}>
+                <h3>Ordered by Player:</h3>
+                {
+                  Object.keys(finalScores).map(item => {
+                    const highlight = finalScores[item] === highestScore ? 'highlight' : '';
+                    return <div key={item}><span className={highlight}>{item}: {finalScores[item]}</span></div>
+                  })
+                }
+              </div>
+              <div style={{flex: 1}}>
+                <h3>Ordered by Points:</h3>
+                {
+                  finalScoresOrdered.map(item => (
+                    <div key={item[0]}>{item[0]}: {item[1]}</div>
+                  ))
+                }
+              </div>
             </div>
-            <div style={{flex: 1}}>
-              <h3>Ordered by Points:</h3>
-              {
-                finalScoresOrdered.map(item => (
-                  <div key={item[0]}>{item[0]}: {item[1]}</div>
-                ))
-              }
-            </div>
-          </div>
-
+          )}
         </div>
       }
     </div>
