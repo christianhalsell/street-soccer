@@ -172,11 +172,11 @@ const TeamCreator = () => {
     setFinalScores(tempFinalObj);
 
     setSubmitDisabled(true);
-    // setEndGameDisabled(false);
     setStartRoundDisabled(false);
   }
 
-  const checkForErrors = () => {
+  // check for errors. If no errors, begin round
+  const checkForErrorsAndBeginRound = () => {
     if (tempRoster.length < tempTeams.length) {
       setError(`You need more players than number of teams: Players: ${tempRoster.length}, Teams: ${tempTeams.length}`);
       return;
@@ -187,13 +187,15 @@ const TeamCreator = () => {
       return;
     }
 
+    setRoundNumber(roundNumber + 1);
+    setRoundScore(tempScores)
+    setGameRound(tempGameRound);
+    setStartRoundDisabled(true);
     return setError(null);
   };
 
   const generateTeams = e => {
     e.preventDefault();
-    setRoundNumber(roundNumber + 1);
-
     addPlayers();
     createRound();
     
@@ -201,30 +203,22 @@ const TeamCreator = () => {
 
     createTeam();
     createGameRound();
-    checkForErrors();
-    setRoundScore(tempScores)
-    setGameRound(tempGameRound);
-    setStartRoundDisabled(true);
+    checkForErrorsAndBeginRound();
   };
-
-  // const endGame = () => {
-  //   alert('TEST: End game');
-  // }
 
   return (
     <div style={{padding: 10}}>
       <form onSubmit={generateTeams}>
         <div className="inputRow">
           <label><b>Number of Players: </b></label>
-          <input type="number" min="1" value={numberOfPlayers} onChange={e => setNumberOfPlayers(parseInt(e.target.value))} />
+          <input disabled={startRoundDisabled} type="number" min="1" value={numberOfPlayers} onChange={e => setNumberOfPlayers(parseInt(e.target.value))} />
         </div>
         <div className="inputRow">
           <label><b>Number of Teams: </b></label>
-          <input type="number" min="1" value={numberOfTeams} onChange={ e => setNumberOfTeams(parseInt(e.target.value)) } />
+          <input disabled={startRoundDisabled} type="number" min="1" value={numberOfTeams} onChange={ e => setNumberOfTeams(parseInt(e.target.value)) } />
         </div>
         <div className="inputRow">
           <button disabled={startRoundDisabled} style={{ fontSize: 24, marginBottom: 10, fontWeight: 700}} type="submit">Start Round</button>
-          {/* <button onClick={endGame} type="button" disabled={endGameDisabled}>End Game</button> */}
         </div>
       </form>
       <br />
@@ -237,7 +231,6 @@ const TeamCreator = () => {
           <form onSubmit={addScores}>
             <div style={{display: 'flex', marginBottom: 10}}>
               <div style={{ fontSize: 30, marginBottom: 10, fontWeight: 700, flex: 1 }}>Round {roundNumber}</div>
-              {/* <button type="submit" disabled={submitDisabled}>Submit Scores</button> */}
             </div>
 
             {!error && gameRound.map((game, idx) => (
