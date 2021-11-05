@@ -1,20 +1,20 @@
 {
   "files": {
     "main.css": "/street-soccer/static/css/main.332a2406.chunk.css",
-    "main.js": "/street-soccer/static/js/main.d0802f26.chunk.js",
-    "main.js.map": "/street-soccer/static/js/main.d0802f26.chunk.js.map",
-    "runtime-main.js": "/street-soccer/static/js/runtime-main.454ddb47.js",
-    "runtime-main.js.map": "/street-soccer/static/js/runtime-main.454ddb47.js.map",
-    "static/js/2.f0763372.chunk.js": "/street-soccer/static/js/2.f0763372.chunk.js",
-    "static/js/2.f0763372.chunk.js.map": "/street-soccer/static/js/2.f0763372.chunk.js.map",
+    "main.js": "/street-soccer/static/js/main.199c03e0.chunk.js",
+    "main.js.map": "/street-soccer/static/js/main.199c03e0.chunk.js.map",
+    "runtime-main.js": "/street-soccer/static/js/runtime-main.570f764e.js",
+    "runtime-main.js.map": "/street-soccer/static/js/runtime-main.570f764e.js.map",
+    "static/js/2.5757a7fc.chunk.js": "/street-soccer/static/js/2.5757a7fc.chunk.js",
+    "static/js/2.5757a7fc.chunk.js.map": "/street-soccer/static/js/2.5757a7fc.chunk.js.map",
     "index.html": "/street-soccer/index.html",
     "static/css/main.332a2406.chunk.css.map": "/street-soccer/static/css/main.332a2406.chunk.css.map",
-    "static/js/2.f0763372.chunk.js.LICENSE.txt": "/street-soccer/static/js/2.f0763372.chunk.js.LICENSE.txt"
+    "static/js/2.5757a7fc.chunk.js.LICENSE.txt": "/street-soccer/static/js/2.5757a7fc.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
-    "static/js/runtime-main.454ddb47.js",
-    "static/js/2.f0763372.chunk.js",
+    "static/js/runtime-main.570f764e.js",
+    "static/js/2.5757a7fc.chunk.js",
     "static/css/main.332a2406.chunk.css",
-    "static/js/main.d0802f26.chunk.js"
+    "static/js/main.199c03e0.chunk.js"
   ]
 }
