@@ -125,7 +125,7 @@ const TeamCreator = () => {
   }
 
   // Add round scores to gamesheet
-  const addScores = e => {
+  const addScores = e => { // here ~CH
     e.preventDefault();
     const teamObj = {};
     const tempFinalObj = {...finalScores};
